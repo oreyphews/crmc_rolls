@@ -55,6 +55,11 @@
             background: #007D63;
         }
 
+        .auth-error{
+            padding-bottom: 11px;
+            margin: auto;
+        }
+
         /* .float{
             position:fixed;
             width:60px;
