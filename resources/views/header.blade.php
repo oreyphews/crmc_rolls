@@ -56,7 +56,7 @@
         }
 
         .auth-error{
-            padding-bottom: 11px;
+            padding-bottom: 12px;
             margin: auto;
         }
 
