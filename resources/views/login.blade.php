@@ -30,8 +30,11 @@
         </div>
 
         <div class="card card-body">
-
-
+            @foreach ($errors->all() as $error)
+            <div class="alert alert-danger auth-error" role="alert">
+                <strong>{{ $error }}</strong>
+            </div>
+            @endforeach
             <!-- <div class="alert alert-soft-success d-flex" role="alert">
                 <i class="material-icons mr-3">check_circle</i>
                 <div class="text-body">An email with password reset instructions has been sent to your email address, if it exists on our system.</div>
@@ -56,28 +59,35 @@
                 <div class="page-separator__text">or</div>
             </div> -->
 
-            <form action="/admin/dashboard" novalidate>
+            <form method="POST" action="{{ route('signin') }}" >
+                @csrf
                 <div class="form-group">
                     <!-- <label class="text-label" for="email_2">ID number:</label> -->
                     <div class="input-group input-group-merge">
-                        <input id="email_2" type="email" required="" class="form-control form-control-prepended" placeholder="ID number">
+                        <input id="email_2" type="text" name="idnum" required="" class="form-control form-control-prepended" placeholder="ID number">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span class="far fa-envelope"></span>
                             </div>
                         </div>
                     </div>
+                    @if ($errors->has('idnum'))
+                    <span class="text-danger">{{ $errors->first('idnum') }}</span>
+                    @endif
                 </div>
                 <div class="form-group">
                     <!-- <label class="text-label" for="password_2">Password:</label> -->
                     <div class="input-group input-group-merge">
-                        <input id="password_2" type="password" required="" class="form-control form-control-prepended" placeholder="Password">
+                        <input id="password_2" type="password" name="password" required="" class="form-control form-control-prepended" placeholder="Password">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span class="fa fa-key"></span>
                             </div>
                         </div>
                     </div>
+                    @if ($errors->has('password'))
+                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                    @endif
                 </div>
                 <div class="form-group mb-1">
                     <button class="btn btn-block btn-primary" type="submit">Login</button>

@@ -7,6 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Dashboard</title>
 
+<script>
+function copyContent () {
+    document.getElementById("desc").value =  
+        document.getElementById("editor").innerText;
+    return true;
+}
+</script>
 @include('header')
 </head>
 
@@ -228,58 +235,23 @@
                          
 
                          <ul class="sidebar-menu mt-0">
-
-                         <li>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">John Doe</h5>
-                                        <p class="text-muted">System Administrator</p>
-                                        <p class="card-text">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet blandit tortor. Etiam eu neque ut felis condimentum consequat sed quis mauris. 
-                                        In viverra eros non lobortis tincidunt. Suspendisse sed rutrum tellus, maximus bibendum purus. Sed nec commodo velit, at eleifend est. Maecenas vitae turpis arcu. 
-                                        Suspendisse condimentum turpis massa, a lobortis enim laoreet eu. Aliquam tristique sapien dui, a ullamcorper nisl luctus in. Vestibulum faucibus cursus est, id rhoncus tellus gravida vel. In egestas velit metus, 
-                                        et convallis magna imperdiet a.
-                                        </p>
-                                    </div>
-                                    <div class="card-footer text-muted">
-                                    Just now
-                                    </div>
+                            <li>   
+                            @foreach($announcements as $announcement)
+                            
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $announcement['title'] }}</h5>
+                                    <p class="text-muted">{{ $announcement['role'] }}</p>
+                                    <p class="card-text">
+                                        {{ $announcement['description'] }}
+                                    </p>
                                 </div>
-                         </li>
-
-                         <li>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">John Doe</h5>
-                                        <p class="text-muted">System Administrator</p>
-                                        <p class="card-text">
-                                       Suspendisse sed rutrum tellus, maximus bibendum purus. Sed nec commodo velit, at eleifend est. Maecenas vitae turpis arcu. 
-                                        Suspendisse condimentum turpis massa, a lobortis enim laoreet eu. Aliquam tristique sapien dui, a ullamcorper nisl luctus in. Vestibulum faucibus cursus est, id rhoncus tellus gravida vel. In egestas velit metus, 
-                                        et convallis magna imperdiet a.
-                                        </p>
-                                    </div>
-                                    <div class="card-footer text-muted">
-                                    2 days ago
-                                    </div>
+                                <div class="card-footer text-muted">
+                                    {{ \App\Http\Controllers\AnnouncementsController::timeago($announcement['created_at']) }}
                                 </div>
-                         </li>
-
-                         <li>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">John Doe</h5>
-                                        <p class="text-muted">System Administrator</p>
-                                        <p class="card-text">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet blandit tortor. Etiam eu neque ut felis condimentum consequat sed quis mauris. 
-                                        In viverra eros non lobortis tincidunt. 
-                                        </p>
-                                    </div>
-                                    <div class="card-footer text-muted">
-                                    a month ago
-                                    </div>
-                                </div>
-                         </li>
-
+                            </div>
+                            @endforeach
+                            </li>    
                          </ul>
                         
 
@@ -308,20 +280,11 @@
                                             <span class="avatar-title rounded-circle bg-soft-secondary text-muted">AD</span>
                                         </span>
                                         <span class="flex d-flex flex-column">
-                                            <strong>John Doe</strong>
-                                            <small class="text-muted text-uppercase">Administrator</small>
+                                            <strong>{{ session()->get('data')[0]['name'] }}</strong>
+                                            <small class="text-muted text-uppercase">{{ session()->get('data')[0]['role'] }}</small>
                                         </span>
                                     </a>
-                                    <div class="dropdown ml-auto">
-                                        <a href="#" data-toggle="dropdown" data-caret="false" class="text-muted"><i class="material-icons">more_vert</i></a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="student-dashboard.html">Dashboard</a>
-                                            <a class="dropdown-item" href="student-profile.html">My profile</a>
-                                            <a class="dropdown-item" href="student-edit-account.html">Edit account</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" rel="nofollow" data-method="delete" href="login.html">Logout</a>
-                                        </div>
-                                    </div>
+                                    @include('profile')
                                 </div>
                             </div>
                             <div class="sidebar-block p-0">
@@ -523,23 +486,27 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-large-title">Create Post</h5>
+                    <h5 class="modal-title" id="modal-large-title">Create Announcement</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div> <!-- // END .modal-header -->
                 <div class="modal-body">
-                <form>
+                    <form method="post" action="{{ route('addAnnouncement') }}" onsubmit='return copyContent()'>
+                        @csrf
                     <div class="form-group">
                         <label for="exampleInputPassword1">Subject</label>
-                        <input type="text" class="form-control" placeholder="Create a subject">
+                        <input type="text" class="form-control" name="title" placeholder="Create a subject">
                     </div>
+                    <input type="text" name="role" value="{{ session()->get('data')[0]['role'] }}" hidden>
                     <div id="editor">
                     </div>
+                    <textarea name="description" id="desc" cols="30" rows="10"  hidden></textarea>
+                    
                 </div> <!-- // END .modal-body -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" onclick="addText()" class="btn btn-primary">Save changes</button>
                 </form>
                 </div> <!-- // END .modal-footer -->
             </div> <!-- // END .modal-content -->

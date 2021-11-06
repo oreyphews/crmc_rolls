@@ -284,16 +284,7 @@
                                             <small class="text-muted text-uppercase">Teacher</small>
                                         </span>
                                     </a>
-                                    <div class="dropdown ml-auto">
-                                        <a href="#" data-toggle="dropdown" data-caret="false" class="text-muted"><i class="material-icons">more_vert</i></a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="student-dashboard.html">Dashboard</a>
-                                            <a class="dropdown-item" href="student-profile.html">My profile</a>
-                                            <a class="dropdown-item" href="student-edit-account.html">Edit account</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" rel="nofollow" data-method="delete" href="login.html">Logout</a>
-                                        </div>
-                                    </div>
+                                    @include('profile')
                                 </div>
                             </div>
                             <div class="sidebar-block p-0">
